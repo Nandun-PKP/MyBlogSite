@@ -1,10 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NoteContext } from '../context/NoteContext';
+import { ThemeContext } from '../context/ThemeContext';
+import MDEditor from '@uiw/react-md-editor';
 import { Save, ArrowLeft } from 'lucide-react';
 
 const AddNote = () => {
   const { addNote, categories } = useContext(NoteContext);
+  const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
@@ -141,19 +144,17 @@ const AddNote = () => {
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2" data-color-mode={theme === 'dark' ? 'dark' : 'light'}>
             <label htmlFor="content" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Content (Markdown supported)
+              Content
             </label>
-            <textarea
-              id="content"
-              required
-              rows="12"
-              className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white font-mono text-sm"
-              placeholder="# Write your notes here..."
+            <MDEditor
               value={content}
-              onChange={(e) => setContent(e.target.value)}
-            ></textarea>
+              onChange={setContent}
+              height={400}
+              className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl focus-within:ring-2 focus-within:ring-blue-500 overflow-hidden"
+              preview="edit"
+            />
           </div>
 
           <div className="flex justify-end pt-4 border-t border-gray-200 dark:border-gray-700">
